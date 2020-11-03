@@ -156,6 +156,9 @@ def generate_near_trees(n):
         yield tree, graph
             
 
+# This is not going to terminate.
+# Skip it with `$ pytest -m 'not long'`
+
 @pytest.mark.long
 def test_random_mst():
     i = 0

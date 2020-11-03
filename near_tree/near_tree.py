@@ -40,23 +40,17 @@ def near_tree_mst(graph):
         break_cycle(graph, cycle)
 
 
-def break_cycle(graph, cycle):
-    max_edge_cost = cycle[0][1]
-    edge_to_remove = cycle[0][0]
-
-    for edge, edge_cost in cycle[1:]:
-        if edge_cost > max_edge_cost:
-            max_edge_cost = edge_cost
-            edge_to_remove = edge
-
-    v, w = edge_to_remove
-    graph[v] = [(u, c) for u, c in graph[v] if u != w]
-    graph[w] = [(u, c) for u, c in graph[w] if u != v]
-
-    return edge_to_remove
-
-
 def find_cycle(graph):
+    """
+    Finds cycle in a graph.
+
+        :param graph: an adjacency list, each element is a tuple (node, cost)
+        :return: cycle – a list of tuples (edge, cost), where edge is a tuple (u, v)
+
+    The algorithm runs the DFS. It detects the cycle when it sees an already visited node.
+    `previous_node[v]` stores the node from which the DFS went to the node `v`.
+    This list is used to restore the cycle.
+    """
     def restore_cycle(from_node):
         v = from_node
         cycle = []
@@ -91,6 +85,30 @@ def find_cycle(graph):
                 return restore_cycle(w)
 
     return None
+
+
+def break_cycle(graph, cycle):
+    """
+    Finds the heaviest edge in `cycle` and removes it from `graph`.
+
+        :param graph: an adjacency list, each element is a tuple (node, cost)
+        :param cycle: a list of tuples (edge, cost), where edge is a tuple (u, v)
+        :return: returns removed edge, modifies the graph
+
+    """
+    max_edge_cost = cycle[0][1]
+    edge_to_remove = cycle[0][0]
+
+    for edge, edge_cost in cycle[1:]:
+        if edge_cost > max_edge_cost:
+            max_edge_cost = edge_cost
+            edge_to_remove = edge
+
+    v, w = edge_to_remove
+    graph[v] = [(u, c) for u, c in graph[v] if u != w]
+    graph[w] = [(u, c) for u, c in graph[w] if u != v]
+
+    return edge_to_remove
 
 
 if __name__ == '__main__':
